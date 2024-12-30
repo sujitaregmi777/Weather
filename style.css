@@ -166,7 +166,7 @@ nav .units button{
     background-color: black;
 }
 .main .cards {
-    display: flex;
+     display: flex;
     flex-wrap: wrap;
     gap: 30px;
     margin-top: 50px;
@@ -192,6 +192,32 @@ nav .units button{
     margin: 0 auto;
 }
 .card .day-temp{
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.cards1 .card0 {
+    width: 200px;
+    height: 200px;
+    border-radius: 15px;
+    color: black;
+    background-color: #fff;
+    text-align: center;
+    padding: 10px 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+.card0 h2{
+    font-size: 15px;
+    font-weight: 600;
+}
+.card0 .card-icon {
+    width: 50%;
+    margin: 0 auto;
+}
+.card0 .day-temp{
     font-size: 12px;
     display: flex;
     align-items: center;
