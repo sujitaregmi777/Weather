@@ -33,4 +33,20 @@ let dayString = days[ now.getDay()];
 return `${ dayString}, ${ hour}:${ minute}`;
 }
 date.innerText = getDateTime();
-setInterval(( ) )
+setInterval(( ) => {
+    date.innerText = getDateTime();
+}, 1000 );
+  function getPublicIp(){
+    fetch("https://mylocation.org/",{
+    method : "GET",
+  })
+  .then((response) => response.json())
+  .then((data) => {
+    console.log(data);
+    currentCity = data. currentCity;
+  });
+}
+getPublicIp();
+function getWeatherData(city, unit, hourlyorWeek) {
+  fetch("")
+}
