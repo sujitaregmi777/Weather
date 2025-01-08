@@ -21,12 +21,14 @@ img{
     width: 100px;
 }
 
+
 .wrapper{
     display: flex;
     width: 1200px;
     min-width: none;
     border-radius: 20px;
     overflow: hidden;
+    
 
 }
 
@@ -37,7 +39,7 @@ img{
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    background-color:  #3a6188;
+    background-color:  #ad5871;
 }
 
 .search{
@@ -168,6 +170,7 @@ nav .units button{
 .main .cards {
      display: flex;
     flex-wrap: wrap;
+    justify-content: space-evenly;
     gap: 30px;
     margin-top: 50px;
 }

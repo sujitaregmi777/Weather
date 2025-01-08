@@ -1,57 +1,42 @@
-const temp = document.getElementById("temp"),
-  date = document.getElementById("date-time");
+{
+const now = new Date();
+const da1te = now.toLocaleDateString('en-US', { weekday: 'long' });
+const time = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true })
+console.log(da1te +", "+ time);
 
 
-let currentCity="";
-let currentUnit ="";
-let hourlyorWeek ="Week";
-
-function getDateTime() {
-let now = moment(), 
-hour = now.format("hh"), 
-minute = now.format("mm"),
-dayString = now.format("dddd");
-return `${ dayString}, ${ hour}:${ minute}`;
+const date = document.getElementById("datetime");
+date.textContent = da1te + ", " + time; 
+//console.log( + date.textContent);
 }
-date.innerText = getDateTime();
-setInterval(( ) => {
-    date.innerText = getDateTime();
-}, 1000 );
-  function getPublicIp(){
-    fetch("https://ipapi.co/json",{
-    method : "GET",
-  })
-  .then((response) => response.json())
-  .then((data) => {
-    console.log(data);
-    currentCity = data.city;
-    const lat= data.latitude;
-    const lon = data.longitude;
-    getWeatherData(lat,lon);
-  });
+if (navigator.location) {
+    navigator.location.getCurrentPosition(function(position) {
+      const latitude = position.coords.latitude;
+      const longitude = position.coords.longitude;
+      console.log(`Latitude: ${latitude}, Longitude: ${longitude}`);
+    });
+  } else {
+    console.log("Geolocation is not supported by this browser.");
+  }
+  const locationElement = document.getElementById("location"); 
+  if (locationElement) { locationElement.textContent = "Latitude: " + latitude + ", Longitude: " + longitude; } 
+   const apiKey = 'YOUR_API_KEY_HERE'; 
+   const url = `https://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${latitude},${longitude}`; 
+   fetch(url) .then(response => response.json()) .then(data => { console.log('Weather Data:', data); 
+   const weatherElement = document.getElementById("weather"); 
+   if (weatherElement) { weatherElement.textContent = `Temperature: ${data.current.temp_c}°C, Condition: ${data.current.condition.text}`; } }) 
+    .catch(error => console.error('Error fetching weather data:', error)); 
+},
+
+   function(error) { switch (error.code) { case error.PERMISSION_DENIED: console.log("User denied the request for Geolocation."); 
+    break; 
+    case error.POSITION_UNAVAILABLE: console.log("Location information is unavailable."); 
+    break; 
+    case error.TIMEOUT: console.log("The request to get user location timed out."); 
+    break; 
+    case error.UNKNOWN_ERROR: console.log("An unknown error occurred."); break; 
 }
-//function getWeatherData(city, unit, hourlyorWeek) {       for city
- function getWeatherData(lat , lon, unit ="metric") {      //for own location
-  fetch("https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid={85c5de0fdba5cff5a4a312988bbdcf0f&units=$unit}",{
-    method : "GET",
-  })
-  .then((response) => response.json() )
-.then((data)=> {
-  console.log(data);
-  updateWeatherData(data);
-})
- }
- function updateWeatherData(data) {
-  const tempElement = document.getElementById("temp");
-  const conditionElement = document.getElementById("condition");
-  const locationElement = document.querySelector(".location-text p");
-
-
-  const temperature = data.main.temp;
-  tempElement.innerText = Math.round(temperature);
-
-  const weatherCondition = data.weather[0].description;
-  conditionElement.innerText = weatherCondition;
-  locationElement.innerText = data.name;
+ }); 
+} else { console.log("Geolocation is not supported by this browser.");
 }
-getPublicIp();
+
