@@ -9,34 +9,75 @@ const date = document.getElementById("datetime");
 date.textContent = da1te + ", " + time; 
 //console.log( + date.textContent);
 }
-if (navigator.location) {
-    navigator.location.getCurrentPosition(function(position) {
-      const latitude = position.coords.latitude;
-      const longitude = position.coords.longitude;
+if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(function(position) {
+      const latitude = position.coords.latitude.toFixed(2);
+      const longitude = position.coords.longitude.toFixed(2);
       console.log(`Latitude: ${latitude}, Longitude: ${longitude}`);
-    });
-  } else {
-    console.log("Geolocation is not supported by this browser.");
-  }
-  const locationElement = document.getElementById("location"); 
-  if (locationElement) { locationElement.textContent = "Latitude: " + latitude + ", Longitude: " + longitude; } 
-   const apiKey = 'YOUR_API_KEY_HERE'; 
-   const url = `https://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${latitude},${longitude}`; 
-   fetch(url) .then(response => response.json()) .then(data => { console.log('Weather Data:', data); 
-   const weatherElement = document.getElementById("weather"); 
-   if (weatherElement) { weatherElement.textContent = `Temperature: ${data.current.temp_c}°C, Condition: ${data.current.condition.text}`; } }) 
+    
+
+      fetch( `https://api.openweathermap.org/data/2.5/weather?q=Pokhara%2C+Nepal&units=metric&appid=85c5de0fdba5cff5a4a312988bbdcf0f`)
+      
+      .then(response => response.json()) 
+      .then(data => { 
+        console.log('Weather Data:', data); 
+        const city= data.name;
+        const locationEle = document.getElementById("location");
+        locationEle.textContent = (city) ;
+     
+        
+    const iconElement = document.getElementById("icon");
+    const tempElement = document.getElementById("temp");
+    const conditionElement = document.getElementById("condition");
+    const rainElement = document.getElementById("rain");
+    const weatherCard = document.getElementById("weather-cards");
+    const uvIndexElement = document.querySelector("uv-index");
+    const uvtextElement = document.querySelector("uv-text");
+    const windSpeedElement = document.getElementById("wind-speed");
+    const sunriseElement = document.getElementById("sunrise");
+    const sunsetElement = document.getElementById("sunset");
+    const humidityElement = document.getElementById("humidity");
+    const humidityElementstatus = document.getElementById("humidity status");
+    const visibilityElement = document.getElementById("visibility");
+    const visibilityElementstatus = document.getElementById("visibility status");
+    const airQualityElement = document.querySelector("air-quality");
+    const airElementstatus = document.getElementById("air-quality status");
+
+
+    //rainElement.innerText= "Perc -" + data.precip + "%";
+    temp.innerText = data.main.temp;
+  
+    if (conditionElement) conditionElement.textContent = data.weather[0].description;
+    if (rainElement) rainElement.textContent = data.rain ? `${data.rain['1h']} mm` : 'No rain';
+    //if(weatherCard) weatherCard.textContent=  data.long?`${data.current.weather}`;
+    if (windSpeedElement) windSpeedElement.textContent = ` ${data.wind.speed.toFixed(1)} m/s`;
+    if (humidityElement) humidityElement.textContent = `${data.main.humidity}%`;
+    if (visibilityElement) visibilityElement.textContent = `${data.visibility / 1000} km`;
+    if (sunriseElement) sunriseElement.textContent = `${new Date(data.sys.sunrise * 1000).toLocaleTimeString()}`;
+    if (sunsetElement) sunsetElement.textContent = `${new Date(data.sys.sunset * 1000).toLocaleTimeString()}`; 
+    fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${latitude}&lon=${longitude}&exclude=hourly,daily&appid=85c5de0fdba5cff5a4a312988bbdcf0f`)
+    .then(response => response.json())
+    .then(uvData => {
+      
+      if (uvIndexElement) uvIndexElement.textContent = `${uvData.current.uvi}`;
+    })
+    .catch(error => console.error('Error fetching UV Index:', error));
+    fetch(`https://api.openweathermap.org/data/2.5/air_pollution?lat=${latitude}&lon=${longitude}&appid=85c5de0fdba5cff5a4a312988bbdcf0f`)
+    .then(response => response.json())
+    .then(airQualityData => {
+
+      if (airQualityElement) airQualityElement.textContent = `${airQualityData.list[0].main.aqi}`;
+    })
+    .catch(error => console.error('Error fetching Air Quality:', error));
+
+})
+
+
+   })
     .catch(error => console.error('Error fetching weather data:', error)); 
-},
-
-   function(error) { switch (error.code) { case error.PERMISSION_DENIED: console.log("User denied the request for Geolocation."); 
-    break; 
-    case error.POSITION_UNAVAILABLE: console.log("Location information is unavailable."); 
-    break; 
-    case error.TIMEOUT: console.log("The request to get user location timed out."); 
-    break; 
-    case error.UNKNOWN_ERROR: console.log("An unknown error occurred."); break; 
-}
- }); 
-} else { console.log("Geolocation is not supported by this browser.");
+  
 }
 
+
+ else { console.log("location is not supported by this browser.");
+}
