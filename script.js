@@ -24,35 +24,75 @@ if (navigator.geolocation) {
         const city= data.name;
         const locationEle = document.getElementById("location");
         locationEle.textContent = (city) ;
-     
+        const iconElement = document.getElementById("icon");
+        const conditionElement = document.getElementById("condition");
+        iconElement.src = `https://openweathermap.org/img/wn${data.weather[0].icon}/@2x.png`;
+        if(conditionElement) conditionElement.textContent = data.weather[0].description;
+
+
         
-    const iconElement = document.getElementById("icon");
-    const tempElement = document.getElementById("temp");
-    const conditionElement = document.getElementById("condition");
-    const rainElement = document.getElementById("rain");
-    const weatherCard = document.getElementById("weather-cards");
-    const uvIndexElement = document.querySelector("uv-index");
-    const uvtextElement = document.querySelector("uv-text");
-    const windSpeedElement = document.getElementById("wind-speed");
-    const sunriseElement = document.getElementById("sunrise");
-    const sunsetElement = document.getElementById("sunset");
-    const humidityElement = document.getElementById("humidity");
-    const humidityElementstatus = document.getElementById("humidity status");
-    const visibilityElement = document.getElementById("visibility");
-    const visibilityElementstatus = document.getElementById("visibility status");
-    const airQualityElement = document.querySelector("air-quality");
-    const airElementstatus = document.getElementById("air-quality status");
+        
+        
+        //const iconElement = document.getElementById("icon");
+        const tempElement = document.getElementById("temp");
+        //const conditionElement = document.getElementById("condition");
+        const rainElement = document.getElementById("rain");
+        const weatherCard = document.getElementById("weather-cards");
+        const windElement = document.getElementById("wind-speed");
+        const windSpeedElement = document.getElementById("wind");
+        const sunriseElement = document.getElementById("sunrise");
+        const sunsetElement = document.getElementById("sunset");
+        const humidityElement = document.getElementById("humidity");
+        const humidityElementstatus = document.getElementById("humidity-status");
+        const visibilityElement = document.getElementById("visibility");
+        const visibilityElementstatus = document.getElementById("visibility-status");
+        const airQualityElement = document.querySelector("air-quality");
+        const airElementstatus = document.getElementById("air-quality status");
 
-
-    //rainElement.innerText= "Perc -" + data.precip + "%";
-    temp.innerText = data.main.temp;
-  
-    if (conditionElement) conditionElement.textContent = data.weather[0].description;
-    if (rainElement) rainElement.textContent = data.rain ? `${data.rain['1h']} mm` : 'No rain';
+    rainElement.innerText= "Perc -" + data.precip + "%";
+    tempElement.innerText = data.main.temp;
+    //if(iconElement) iconElement.querySelector = data.weather.
+    //if (conditionElement) conditionElement.textContent = data.weather[0].description;
+    //if (rainElement) rainElement.textContent = data.rain ? `${data.rain['1h']} mm` : 'No rain';
     //if(weatherCard) weatherCard.textContent=  data.long?`${data.current.weather}`;
-    if (windSpeedElement) windSpeedElement.textContent = ` ${data.wind.speed.toFixed(1)} m/s`;
+    if (windElement) windElement.textContent = ` ${data.wind.speed.toFixed(1)} m/s`;
+    if(windSpeedElement) {
+      wind = data.wind.speed.toFixed(1);
+      if (wind < 5) {
+        windSpeedElement.textContent = `Low `;
+    } else if (wind >= 5 && wind <= 15) {
+        windSpeedElement.textContent = `Moderate`;
+    } else {
+        windSpeedElement.textContent = `High`;
+    }
+    }
+
     if (humidityElement) humidityElement.textContent = `${data.main.humidity}%`;
+      if (humidityElementstatus) {
+        const humidity = data.main.humidity;
+    
+        if (humidity < 30) {
+            humidityElementstatus.textContent = `Low `;
+        } else if (humidity >= 30 && humidity <= 60) {
+            humidityElementstatus.textContent = `Moderate`;
+        } else {
+            humidityElementstatus.textContent = `High`;
+        }
+    }
+
     if (visibilityElement) visibilityElement.textContent = `${data.visibility / 1000} km`;
+    if (visibilityElementstatus) {
+      const visiblity = data.visibility / 1000;
+  
+      if (visiblity < 7) {
+          visibilityElementstatus.textContent = `Low `;
+      } else if (visiblity >= 7 && visibility <= 12) {
+          visibilityElementstatus.textContent = `Moderate`;
+      } else {
+          visibilityElementstatus.textContent = `High`;
+      }
+  }
+
     if (sunriseElement) sunriseElement.textContent = `${new Date(data.sys.sunrise * 1000).toLocaleTimeString()}`;
     if (sunsetElement) sunsetElement.textContent = `${new Date(data.sys.sunset * 1000).toLocaleTimeString()}`; 
     fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${latitude}&lon=${longitude}&exclude=hourly,daily&appid=85c5de0fdba5cff5a4a312988bbdcf0f`)
@@ -81,3 +121,4 @@ if (navigator.geolocation) {
 
  else { console.log("location is not supported by this browser.");
 }
+
