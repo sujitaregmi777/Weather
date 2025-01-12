@@ -17,7 +17,6 @@ if (navigator.geolocation) {
     
 
       fetch( `https://api.openweathermap.org/data/2.5/weather?q=Pokhara%2C+Nepal&units=metric&appid=85c5de0fdba5cff5a4a312988bbdcf0f`)
-      
       .then(response => response.json()) 
       .then(data => { 
         console.log('Weather Data:', data); 
@@ -26,8 +25,23 @@ if (navigator.geolocation) {
         locationEle.textContent = (city) ;
         const iconElement = document.getElementById("icon");
         const conditionElement = document.getElementById("condition");
-        iconElement.src = `https://openweathermap.org/img/wn${data.weather[0].icon}/@2x.png`;
-        if(conditionElement) conditionElement.textContent = data.weather[0].description;
+        iconElement.src = `https://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png`;
+        /*if(conditionElement) conditionElement.textContent = data.weather[0].description;
+        const weatherCard = document.getElementById("weather-cards");
+        const card = document.createElement('div');
+        card.innerHTML = `
+        <h2 class="day-name">${day}</h2>
+        <div class="weather-icon">
+        <img src="${weatherIcons[index]}" alt="Weather icon" />
+        </div>
+        <div class="day-temp">
+        <h2 class="temp">${temp}</h2>
+        <span class="temp-unit">°C</span>
+        </div>
+        `;
+        
+        weatherCardsContainer.appendChild(card);
+        da1tee++;*/
 
 
         
@@ -35,9 +49,8 @@ if (navigator.geolocation) {
         
         //const iconElement = document.getElementById("icon");
         const tempElement = document.getElementById("temp");
-        //const conditionElement = document.getElementById("condition");
+       // const conditionElement = document.getElementById("condition");
         const rainElement = document.getElementById("rain");
-        const weatherCard = document.getElementById("weather-cards");
         const windElement = document.getElementById("wind-speed");
         const windSpeedElement = document.getElementById("wind");
         const sunriseElement = document.getElementById("sunrise");
@@ -48,11 +61,16 @@ if (navigator.geolocation) {
         const visibilityElementstatus = document.getElementById("visibility-status");
         const airQualityElement = document.querySelector("air-quality");
         const airElementstatus = document.getElementById("air-quality status");
+        const uvIndexElement = document.getElementById("uv-index");
+        const uvTest = document.getElementById("uv-text");
 
     rainElement.innerText= "Perc -" + data.precip + "%";
+    //const precipitation = dayData.rain || 0; // Fallback to 0 if no rain
+//rainElement.textContent = `Perc - ${data.precipitation} mm`;
+
     tempElement.innerText = data.main.temp;
     //if(iconElement) iconElement.querySelector = data.weather.
-    //if (conditionElement) conditionElement.textContent = data.weather[0].description;
+    if (conditionElement) conditionElement.textContent = data.weather[0].description;
     //if (rainElement) rainElement.textContent = data.rain ? `${data.rain['1h']} mm` : 'No rain';
     //if(weatherCard) weatherCard.textContent=  data.long?`${data.current.weather}`;
     if (windElement) windElement.textContent = ` ${data.wind.speed.toFixed(1)} m/s`;
@@ -86,13 +104,12 @@ if (navigator.geolocation) {
   
       if (visiblity < 7) {
           visibilityElementstatus.textContent = `Low `;
-      } else if (visiblity >= 7 && visibility <= 12) {
+      } else if (visiblity >= 7 && visiblity <= 12) {
           visibilityElementstatus.textContent = `Moderate`;
       } else {
           visibilityElementstatus.textContent = `High`;
       }
   }
-
     if (sunriseElement) sunriseElement.textContent = `${new Date(data.sys.sunrise * 1000).toLocaleTimeString()}`;
     if (sunsetElement) sunsetElement.textContent = `${new Date(data.sys.sunset * 1000).toLocaleTimeString()}`; 
     fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${latitude}&lon=${longitude}&exclude=hourly,daily&appid=85c5de0fdba5cff5a4a312988bbdcf0f`)
@@ -102,6 +119,7 @@ if (navigator.geolocation) {
       if (uvIndexElement) uvIndexElement.textContent = `${uvData.current.uvi}`;
     })
     .catch(error => console.error('Error fetching UV Index:', error));
+
     fetch(`https://api.openweathermap.org/data/2.5/air_pollution?lat=${latitude}&lon=${longitude}&appid=85c5de0fdba5cff5a4a312988bbdcf0f`)
     .then(response => response.json())
     .then(airQualityData => {
@@ -110,15 +128,19 @@ if (navigator.geolocation) {
     })
     .catch(error => console.error('Error fetching Air Quality:', error));
 
+    
+});
 })
 
 
-   })
     .catch(error => console.error('Error fetching weather data:', error)); 
   
+
 }
 
 
- else { console.log("location is not supported by this browser.");
+ else { 
+  console.log("location is not supported by this browser.");
 }
+
 
