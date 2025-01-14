@@ -17,6 +17,7 @@ if (navigator.geolocation) {
     
 
       fetch( `https://api.openweathermap.org/data/2.5/weather?q=Pokhara%2C+Nepal&units=metric&appid=85c5de0fdba5cff5a4a312988bbdcf0f`)
+      //fetch("https://api.openweathermap.org/data/2.5/onecall?lat={latitude}&lon={longitude}&exclude=hourly,daily&appid=85c5de0fdba5cff5a4a312988bbdcf0f")
       .then(response => response.json()) 
       .then(data => { 
         console.log('Weather Data:', data); 
@@ -26,30 +27,32 @@ if (navigator.geolocation) {
         const iconElement = document.getElementById("icon");
         const conditionElement = document.getElementById("condition");
         iconElement.src = `https://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png`;
-        /*if(conditionElement) conditionElement.textContent = data.weather[0].description;
+        if(conditionElement) conditionElement.textContent = data.weather[0].description;
         const weatherCard = document.getElementById("weather-cards");
+        
+        if (weatherCard) {
         const card = document.createElement('div');
+        card.classList.add('card');
+        const date = new Date().toLocaleDateString('en-US', { weekday: 'long' });
+        //const temp = data.main.temp.toFixed(1);
         card.innerHTML = `
-        <h2 class="day-name">${day}</h2>
+        <h2 class="day-name">${date}</h2>
         <div class="weather-icon">
-        <img src="${weatherIcons[index]}" alt="Weather icon" />
+        <img src="https://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png" alt="Weather icon" />
         </div>
         <div class="day-temp">
-        <h2 class="temp">${temp}</h2>
+        <h2 class="temp">${data.main.temp}</h2>
         <span class="temp-unit">°C</span>
         </div>
         `;
         
-        weatherCardsContainer.appendChild(card);
-        da1tee++;*/
-
-
+        weatherCard.appendChild(card);
         
-        
-        
-        //const iconElement = document.getElementById("icon");
+      
+      }else{
+        console.log("Weather cards container not found");
+      }
         const tempElement = document.getElementById("temp");
-       // const conditionElement = document.getElementById("condition");
         const rainElement = document.getElementById("rain");
         const windElement = document.getElementById("wind-speed");
         const windSpeedElement = document.getElementById("wind");
@@ -64,7 +67,13 @@ if (navigator.geolocation) {
         const uvIndexElement = document.getElementById("uv-index");
         const uvTest = document.getElementById("uv-text");
 
-    rainElement.innerText= "Perc -" + data.precip + "%";
+    //rainElement.innerText= "Perc -" + data.precip + "%";
+    if (data.rain) {
+      rainElement.innerText = "Perc - " + (data.rain['1h'] || 0) + "%"; 
+  } else {
+      
+      rainElement.innerText = "Perc - No rain";
+  }
     //const precipitation = dayData.rain || 0; // Fallback to 0 if no rain
 //rainElement.textContent = `Perc - ${data.precipitation} mm`;
 
@@ -129,16 +138,15 @@ if (navigator.geolocation) {
     .catch(error => console.error('Error fetching Air Quality:', error));
 
     
-});
+
 })
 
 
     .catch(error => console.error('Error fetching weather data:', error)); 
   
 
+});
 }
-
-
  else { 
   console.log("location is not supported by this browser.");
 }
